@@ -2,18 +2,13 @@ package com.globalmart.productcatalogue.bl.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName("ProductDTO")
-@Entity
 public class ProductDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")
