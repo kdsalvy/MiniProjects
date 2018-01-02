@@ -7,7 +7,7 @@
 
 	<persistence-unit name="InMemH2DB" transaction-type="RESOURCE_LOCAL">
 
-		<class>com.globalmart.productcatalogue.bl.dto.ProductDTO</class>
+		<class>com.globalmart.productcatalogue.model.entity.Product</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:globalmart" />
@@ -16,8 +16,6 @@
 			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
 			<property name="javax.persistence.schema-generation.database.action"
 				value="drop-and-create" />
-	<!-- <property name="javax.persistence.schema-generation.scripts.action" 
-		value="drop-and-create" /> -->
 		</properties>
 
 	</persistence-unit>
