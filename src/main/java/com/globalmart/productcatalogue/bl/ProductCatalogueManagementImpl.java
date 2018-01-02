@@ -27,7 +27,10 @@ public class ProductCatalogueManagementImpl implements ProductCatalogueManagemen
     @Override
     public ProductDTO getProduct(int id) {
 	Product bdo = opr.read(id);
-	return new ProductDTO(bdo.getId(), bdo.getName(), bdo.getType(), bdo.getCode(), bdo.getPrice());
+	ProductDTO result = null;
+	if(bdo != null)
+	    result = new ProductDTO(bdo.getId(), bdo.getName(), bdo.getType(), bdo.getCode(), bdo.getPrice());
+	return result;
     }
 
     @Override

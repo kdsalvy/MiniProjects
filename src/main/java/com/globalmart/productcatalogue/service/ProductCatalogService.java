@@ -43,7 +43,13 @@ public class ProductCatalogService {
     @Path("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProduct(@PathParam("id") int id) {
-	return Response.ok(pcm.getProduct(id)).build();
+	ProductDTO result = pcm.getProduct(id);
+	Response response = null;
+	if (result != null)
+	    Response.ok().build();
+	else
+	    Response.noContent().build();
+	return response;
     }
 
     /**
@@ -53,9 +59,15 @@ public class ProductCatalogService {
      * @return
      */
     @DELETE
-    @Path("remove/{id}")
+    @Path("/remove/{id}")
     public Response deleteProduct(@PathParam("id") int id) {
-	return Response.ok(pcm.deleteProduct(id)).build();
+	Response response = null;
+	boolean result = pcm.deleteProduct(id);
+	if(result)
+	    response = Response.ok().build();
+	else
+	    response = Response.noContent().build();
+	return response;
     }
 
     /**
@@ -67,7 +79,7 @@ public class ProductCatalogService {
      * @return
      */
     @GET
-    @Path("search/{key}/{value}")
+    @Path("/search/{key}/{value}")
     public Response searchProducts(@PathParam("key") String key, @PathParam("value") String value) {
 	ObjectMapper mapper = new ObjectMapper();
 	String pList = "";

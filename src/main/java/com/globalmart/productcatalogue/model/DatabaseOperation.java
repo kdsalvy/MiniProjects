@@ -8,6 +8,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.eclipse.jetty.util.log.Log;
+import org.eclipse.jetty.util.log.Logger;
+import org.eclipse.jetty.util.log.Slf4jLog;
+
 import com.globalmart.productcatalogue.model.entity.Product;
 
 /**
@@ -17,7 +21,8 @@ import com.globalmart.productcatalogue.model.entity.Product;
  *
  */
 public class DatabaseOperation {
-
+    
+    private static Logger LOG = Log.getLog();
     private static final Object _LOCK = new Object();
 
     public int insert(Product product) {
@@ -48,26 +53,39 @@ public class DatabaseOperation {
 	    e.printStackTrace();
 	} finally {
 	    entityManager.close();
+	    if(product == null)
+		LOG.warn("No records records were found with given id value !!");
 	}
 	return product;
     }
 
     public boolean delete(int id) {
 	EntityManager entityManager = DatabaseUtil.getEntityManager();
+	boolean result = false;
 	try {
 	    entityManager.getTransaction().begin();
+	    Product entity = null;
 	    synchronized (_LOCK) {
-		entityManager.remove(entityManager.find(Product.class, id));
+		entity = entityManager.find(Product.class, id);
+		if(entity != null){
+		    entityManager.remove(entity);
+		    entityManager.getTransaction().commit();
+		    result =  true;
+		}
+		else {
+		    LOG.warn("No records records were found with given id value !!");
+		    result = false;
+		}
 	    }
-	    entityManager.getTransaction().commit();
-	    return true;
 	} catch (Exception e) {
+	    result = false;
 	    e.printStackTrace();
 	    entityManager.getTransaction().rollback();
 	    throw e;
 	} finally {
 	    entityManager.close();
 	}
+	return result;
     }
 
     public List<Product> search(String key, String value) {
