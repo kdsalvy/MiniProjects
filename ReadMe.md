@@ -10,7 +10,8 @@ Database CRUD operations as REST
 
 Technical Specifications
 -------------
-Build & Configuration - Maven 
-Database - H2
-REST - Jersey
-Server Runtime - Eclipse embedded Jetty server.
+Technical specifications from development and deployment perspective
+- Build & Configuration - Maven 
+- Database - H2
+- REST - Jersey
+- Server Runtime - Eclipse embedded Jetty server.
