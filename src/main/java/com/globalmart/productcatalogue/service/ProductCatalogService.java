@@ -17,8 +17,6 @@ import javax.ws.rs.core.Response;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.globalmart.productcatalogue.bl.ProductCatalogueManagement;
 import com.globalmart.productcatalogue.bl.ProductCatalogueManagementImpl;
 import com.globalmart.productcatalogue.bl.dto.ProductDTO;
@@ -43,7 +41,7 @@ public class ProductCatalogService {
 	    LOG.info("Product Added with id: " + id);
 	    response = Response.created(URI.create("/productcatalogue/get/" + id)).build();
 	} catch (Exception e) {
-	    LOG.info(e);
+	    LOG.warn(e);
 	    response = Response.serverError().entity("Exception in adding product: " + e.getMessage()).build();
 	}
 	return response;
@@ -66,11 +64,11 @@ public class ProductCatalogService {
 		LOG.info("Product Found with id: " + id);
 		response = Response.ok().entity(result).build();
 	    } else {
-		LOG.info("Could not find product with id: " + id);
+		LOG.warn("Could not find product with id: " + id);
 		response = Response.noContent().entity("Product with given id is not found").build();
 	    }
 	} catch (Exception e) {
-	    LOG.info(e);
+	    LOG.warn(e);
 	    response = Response.serverError()
 		    .entity("Exception in fetching the product with given id: " + e.getMessage()).build();
 	}
@@ -94,11 +92,11 @@ public class ProductCatalogService {
 		LOG.info("Deleted the product with id: " + id);
 		response = Response.ok().build();
 	    } else {
-		LOG.info("No Product found with id: " + id);
+		LOG.warn("No Product found with id: " + id);
 		response = Response.noContent().entity("Product with given id is not found").build();
 	    }
 	} catch (Exception e) {
-	    LOG.info(e);
+	    LOG.warn(e);
 	    response = Response.serverError()
 		    .entity("Exception in deleting the product with given id: " + e.getMessage()).build();
 	}
@@ -117,21 +115,18 @@ public class ProductCatalogService {
     @Path("/search")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchProducts(@QueryParam("key") String key, @QueryParam("value") String value) {
-	ObjectMapper mapper = new ObjectMapper();
-	String pList = "";
 	Response response = null;
 	try {
 	    List<ProductDTO> products = pcm.searchProduct(key, value);
 	    if (products == null || products.isEmpty()) {
-		LOG.info("Products with given query parameters are not found");
+		LOG.warn("Products with given query parameters are not found");
 		response = Response.noContent().entity("No Content Found").build();
 	    } else {
 		LOG.info("Products with given query parameters are found");
-		pList = mapper.writeValueAsString(products);
-		response = Response.ok().entity(pList).build();
+		response = Response.ok().entity(products).build();
 	    }
-	} catch (JsonProcessingException e) {
-	    LOG.info(e);
+	} catch (Exception e) {
+	    LOG.warn(e);
 	    response = Response.serverError()
 		    .entity("Exception in searching the product with given query parameters: " + e.getMessage())
 		    .build();

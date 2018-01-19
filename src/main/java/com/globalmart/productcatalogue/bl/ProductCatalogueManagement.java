@@ -12,11 +12,11 @@ import com.globalmart.productcatalogue.bl.dto.ProductDTO;
  */
 public interface ProductCatalogueManagement {
 
-    public int addProduct(ProductDTO product);
+	public int addProduct(ProductDTO product);
 
-    public ProductDTO getProduct(int id);
+	public ProductDTO getProduct(int id);
 
-    public List<ProductDTO> searchProduct(String criteria, String value);
+	public List<ProductDTO> searchProduct(String criteria, String value);
 
-    public boolean deleteProduct(int id);
+	public boolean deleteProduct(int id);
 }
