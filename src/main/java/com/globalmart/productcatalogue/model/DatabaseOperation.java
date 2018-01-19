@@ -19,7 +19,7 @@ import com.globalmart.productcatalogue.model.entity.Product;
  * @author skedia
  *
  */
-public class DatabaseOperation implements IDatabaseOperation {
+public class DatabaseOperation implements ProductCatalogueManager {
 
 	private static Logger LOG = Log.getLogger(DatabaseOperation.class);
 	private static final Object _LOCK = new Object();
