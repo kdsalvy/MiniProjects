@@ -26,8 +26,8 @@ public class ProductCatalogServiceTest1 {
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	Response response = target.path("add").path("1").request().accept(MediaType.TEXT_PLAIN)
-		.delete(Response.class);
+	Response response = target.path("add").request().accept(MediaType.APPLICATION_JSON)
+		.post(Entity.entity(null, MediaType.APPLICATION_JSON));
 	Assert.assertEquals(response.getStatus(), 204);
     }
     
@@ -46,8 +46,8 @@ public class ProductCatalogServiceTest1 {
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	Response response = target.path("search").path("1").path("2").request().accept(MediaType.TEXT_PLAIN)
-		.get(Response.class);
+	Response response = target.path("search").queryParam("key","type").queryParam("value","Detergent").request()
+		.accept(MediaType.APPLICATION_JSON).get(Response.class);
 	Assert.assertEquals(response.getStatus(), 204);
     }
 
@@ -56,7 +56,7 @@ public class ProductCatalogServiceTest1 {
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	Response response = target.path("remove").path("1").request().accept(MediaType.TEXT_PLAIN)
+	Response response = target.path("remove").path("1").request().accept(MediaType.APPLICATION_JSON)
 		.delete(Response.class);
 	Assert.assertEquals(response.getStatus(), 204);
     }
@@ -69,7 +69,7 @@ public class ProductCatalogServiceTest1 {
 	WebTarget target = client.target(getApplicationContext());
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
-	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
+	Assert.assertEquals(responseAdd.getStatus(), Response.Status.CREATED.getStatusCode());
     }
     
     @Test
@@ -81,11 +81,13 @@ public class ProductCatalogServiceTest1 {
 	// Add an element first
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
-	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
+	Assert.assertEquals(responseAdd.getStatus(), Response.Status.CREATED.getStatusCode());
+	
+	String id = responseAdd.readEntity(String.class);
 	// Then view it
-	Response responseRemoval = target.path("remove").path("1").request()
-		.delete(Response.class);
-	Assert.assertEquals(responseRemoval.getStatus(), 204);
+	Response responseRemoval = target.path("get").path(id).request().accept(MediaType.APPLICATION_JSON)
+		.get(Response.class);
+	Assert.assertEquals(responseRemoval.getStatus(), 200);
     }
     
     @Test
@@ -97,11 +99,11 @@ public class ProductCatalogServiceTest1 {
 	// Add an element first
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
-	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
+	Assert.assertEquals(responseAdd.getStatus(), Response.Status.CREATED.getStatusCode());
 	// Then search it
-	Response responseRemoval = target.path("search").path("1").request()
-		.delete(Response.class);
-	Assert.assertEquals(responseRemoval.getStatus(), 204);
+	Response responseRemoval = target.path("search").queryParam("key", "type").queryParam("value","Stationery")
+		.request().accept(MediaType.APPLICATION_JSON).get(Response.class);
+	Assert.assertEquals(responseRemoval.getStatus(), 200);
     }
     
     @Test
@@ -113,11 +115,12 @@ public class ProductCatalogServiceTest1 {
 	// Add an element first
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
-	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
+	Assert.assertEquals(responseAdd.getStatus(), Response.Status.CREATED.getStatusCode());
 	// Then remove it
-	Response responseRemoval = target.path("remove").path("1").request()
+	String id = responseAdd.readEntity(String.class);
+	Response responseRemoval = target.path("remove").path(id).request().accept(MediaType.APPLICATION_JSON)
 		.delete(Response.class);
-	Assert.assertEquals(responseRemoval.getStatus(), 204);
+	Assert.assertEquals(responseRemoval.getStatus(), 200);
     }
     
     private static URI getApplicationContext() {

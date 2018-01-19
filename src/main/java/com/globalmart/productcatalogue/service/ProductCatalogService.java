@@ -39,10 +39,10 @@ public class ProductCatalogService {
 	try {
 	    int id = pcm.addProduct(product);
 	    LOG.info("Product Added with id: " + id);
-	    response = Response.created(URI.create("/productcatalogue/get/" + id)).build();
+	    response = Response.created(URI.create("/productcatalogue/get/" + id)).entity(id).build();
 	} catch (Exception e) {
 	    LOG.warn(e);
-	    response = Response.serverError().entity("Exception in adding product: " + e.getMessage()).build();
+	    response = Response.noContent().entity("Exception in adding product: " + e.getMessage()).build();
 	}
 	return response;
     }
@@ -69,7 +69,7 @@ public class ProductCatalogService {
 	    }
 	} catch (Exception e) {
 	    LOG.warn(e);
-	    response = Response.serverError()
+	    response = Response.noContent()
 		    .entity("Exception in fetching the product with given id: " + e.getMessage()).build();
 	}
 	return response;
@@ -97,7 +97,7 @@ public class ProductCatalogService {
 	    }
 	} catch (Exception e) {
 	    LOG.warn(e);
-	    response = Response.serverError()
+	    response = Response.noContent()
 		    .entity("Exception in deleting the product with given id: " + e.getMessage()).build();
 	}
 	return response;
@@ -127,7 +127,7 @@ public class ProductCatalogService {
 	    }
 	} catch (Exception e) {
 	    LOG.warn(e);
-	    response = Response.serverError()
+	    response = Response.noContent()
 		    .entity("Exception in searching the product with given query parameters: " + e.getMessage())
 		    .build();
 	}

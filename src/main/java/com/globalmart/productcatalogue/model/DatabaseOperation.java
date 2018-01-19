@@ -34,7 +34,6 @@ public class DatabaseOperation implements ProductCatalogueManager {
 	    }
 	    entityManager.getTransaction().commit();
 	} catch (Exception e) {
-	    e.printStackTrace();
 	    entityManager.getTransaction().rollback();
 	    throw e;
 	} finally {
@@ -48,8 +47,6 @@ public class DatabaseOperation implements ProductCatalogueManager {
 	Product product = null;
 	try {
 	    product = entityManager.find(Product.class, id);
-	} catch (Exception e) {
-	    e.printStackTrace();
 	} finally {
 	    entityManager.close();
 	    if (product == null)
@@ -77,7 +74,6 @@ public class DatabaseOperation implements ProductCatalogueManager {
 	    }
 	} catch (Exception e) {
 	    result = false;
-	    e.printStackTrace();
 	    entityManager.getTransaction().rollback();
 	    throw e;
 	} finally {
@@ -96,9 +92,6 @@ public class DatabaseOperation implements ProductCatalogueManager {
 	    Predicate where = criteriaBuilder.equal(root.get(key), value);
 	    criteriaQuery.where(where);
 	    return entityManager.createQuery(criteriaQuery).getResultList();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    throw e;
 	} finally {
 	    entityManager.close();
 	}

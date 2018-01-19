@@ -11,6 +11,7 @@ public class ProductDTO implements Serializable {
 
     @JsonProperty("id")
     private int id;
+
     @JsonProperty("name")
     private String name;
     @JsonProperty("type")
