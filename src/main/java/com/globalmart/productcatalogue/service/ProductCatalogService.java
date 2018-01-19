@@ -19,7 +19,7 @@ import com.globalmart.productcatalogue.bl.dto.ProductDTO;
 @Path("/productcatalogue")
 public class ProductCatalogService {
 
-    static ProductCatalogueManagement pcm = new ProductCatalogueManagementImpl();
+    static ProductCatalogueManagement PCM = new ProductCatalogueManagementImpl();
 
     /**
      * Adds a product
@@ -29,7 +29,7 @@ public class ProductCatalogService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addProduct(ProductDTO product) {
-	int id = pcm.addProduct(product);
+	int id = PCM.addProduct(product);
 	return Response.ok(id).build();
     }
 
@@ -43,7 +43,7 @@ public class ProductCatalogService {
     @Path("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProduct(@PathParam("id") int id) {
-	ProductDTO result = pcm.getProduct(id);
+	ProductDTO result = PCM.getProduct(id);
 	Response response = null;
 	if (result != null)
 	    Response.ok().build();
@@ -62,7 +62,7 @@ public class ProductCatalogService {
     @Path("/remove/{id}")
     public Response deleteProduct(@PathParam("id") int id) {
 	Response response = null;
-	boolean result = pcm.deleteProduct(id);
+	boolean result = PCM.deleteProduct(id);
 	if(result)
 	    response = Response.ok().build();
 	else
@@ -84,7 +84,7 @@ public class ProductCatalogService {
 	ObjectMapper mapper = new ObjectMapper();
 	String pList = "";
 	try {
-	    pList = mapper.writeValueAsString(pcm.searchProduct(key, value));
+	    pList = mapper.writeValueAsString(PCM.searchProduct(key, value));
 	} catch (JsonProcessingException e) {
 	    e.printStackTrace();
 	}
