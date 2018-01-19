@@ -4,14 +4,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+/**
+ * Class responsible for creating entity-manager.
+ *
+ */
 public class DatabaseUtil {
 
     private static volatile EntityManagerFactory factory = null;
     private static final Object _LOCK = new Object();
 
-    private DatabaseUtil() {
-
-    }
+    private DatabaseUtil() {}
 
     private static <T> EntityManagerFactory getEntityManagerFactory() {
 	try {
