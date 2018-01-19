@@ -26,7 +26,7 @@ public class ProductCatalogServiceTest1 {
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	Response response = target.path("remove").path("1").request().accept(MediaType.TEXT_PLAIN)
+	Response response = target.path("add").path("1").request().accept(MediaType.TEXT_PLAIN)
 		.delete(Response.class);
 	Assert.assertEquals(response.getStatus(), 204);
     }
@@ -42,7 +42,7 @@ public class ProductCatalogServiceTest1 {
     }
     
     @Test
-    public void testUpdateNegative() {
+    public void testSearchNegative() {
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
@@ -64,53 +64,42 @@ public class ProductCatalogServiceTest1 {
     @Test
     public void testAddPositive() {
 	ProductDTO stub = new ProductDTO(1, "One", "Stationery", "A2E1",45.00d);
-	
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	
-	// Add an element first
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
 	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
-	// Then remove it
-	Response responseRemoval = target.path("remove").path("1").request()
-		.delete(Response.class);
-	Assert.assertEquals(responseRemoval.getStatus(), 204);
     }
     
     @Test
     public void testViewPositive() {
 	ProductDTO stub = new ProductDTO(1, "One", "Stationery", "A2E1",45.00d);
-	
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	
 	// Add an element first
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
 	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
-	// Then remove it
+	// Then view it
 	Response responseRemoval = target.path("remove").path("1").request()
 		.delete(Response.class);
 	Assert.assertEquals(responseRemoval.getStatus(), 204);
     }
     
     @Test
-    public void testUpdatePositive() {
+    public void testSearchPositive() {
 	ProductDTO stub = new ProductDTO(1, "One", "Stationery", "A2E1",45.00d);
-	
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	
 	// Add an element first
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
 	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
-	// Then remove it
-	Response responseRemoval = target.path("remove").path("1").request()
+	// Then search it
+	Response responseRemoval = target.path("search").path("1").request()
 		.delete(Response.class);
 	Assert.assertEquals(responseRemoval.getStatus(), 204);
     }
@@ -118,11 +107,9 @@ public class ProductCatalogServiceTest1 {
     @Test
     public void testDeletePositive() {
 	ProductDTO stub = new ProductDTO(1, "One", "Stationery", "A2E1",45.00d);
-	
 	ClientConfig config = new ClientConfig();
 	Client client = ClientBuilder.newClient(config);
 	WebTarget target = client.target(getApplicationContext());
-	
 	// Add an element first
 	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
