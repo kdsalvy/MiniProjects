@@ -20,6 +20,36 @@ import com.globalmart.productcatalogue.bl.dto.ProductDTO;
 public class ProductCatalogServiceTest1 {
 
     private static final String APP_URL = "http://localhost:8080/productcatalogue";
+    
+    @Test
+    public void testAddNegative() {
+	ClientConfig config = new ClientConfig();
+	Client client = ClientBuilder.newClient(config);
+	WebTarget target = client.target(getApplicationContext());
+	Response response = target.path("remove").path("1").request().accept(MediaType.TEXT_PLAIN)
+		.delete(Response.class);
+	Assert.assertEquals(response.getStatus(), 204);
+    }
+    
+    @Test
+    public void testViewNegative() {
+	ClientConfig config = new ClientConfig();
+	Client client = ClientBuilder.newClient(config);
+	WebTarget target = client.target(getApplicationContext());
+	Response response = target.path("get").path("1").request().accept(MediaType.APPLICATION_JSON)
+		.get(Response.class);
+	Assert.assertEquals(response.getStatus(), 204);
+    }
+    
+    @Test
+    public void testUpdateNegative() {
+	ClientConfig config = new ClientConfig();
+	Client client = ClientBuilder.newClient(config);
+	WebTarget target = client.target(getApplicationContext());
+	Response response = target.path("search").path("1").path("2").request().accept(MediaType.TEXT_PLAIN)
+		.get(Response.class);
+	Assert.assertEquals(response.getStatus(), 204);
+    }
 
     @Test
     public void testDeleteNegative() {
@@ -40,7 +70,7 @@ public class ProductCatalogServiceTest1 {
 	WebTarget target = client.target(getApplicationContext());
 	
 	// Add an element first
-	Response responseAdd = target.path("add").request()
+	Response responseAdd = target.path("add").request().accept(MediaType.APPLICATION_JSON)
 		.post(Entity.entity(stub, MediaType.APPLICATION_JSON));
 	Assert.assertEquals(responseAdd.getStatus(), Response.Status.OK.getStatusCode());
 	// Then remove it
