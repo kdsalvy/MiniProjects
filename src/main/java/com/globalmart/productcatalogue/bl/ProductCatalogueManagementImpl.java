@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.globalmart.productcatalogue.bl.dto.ProductDTO;
 import com.globalmart.productcatalogue.model.DatabaseOperation;
+import com.globalmart.productcatalogue.model.IDatabaseOperation;
 import com.globalmart.productcatalogue.model.entity.Product;
 
 /**
@@ -16,35 +17,37 @@ import com.globalmart.productcatalogue.model.entity.Product;
  */
 public class ProductCatalogueManagementImpl implements ProductCatalogueManagement {
 
-    static DatabaseOperation opr = new DatabaseOperation();
+	private static IDatabaseOperation opr = new DatabaseOperation();
 
-    @Override
-    public int addProduct(ProductDTO dto) {
-	Product product = new Product(dto.getId(), dto.getName(), dto.getType(), dto.getCode(), dto.getPrice());
-	return opr.insert(product);
-    }
+	@Override
+	public int addProduct(ProductDTO dto) {
+		// Convert the dto to entity object
+		Product product = new Product(dto.getName(), dto.getType(), dto.getCode(), dto.getPrice());
+		// Persist the entity object
+		return opr.insert(product);
+	}
 
-    @Override
-    public ProductDTO getProduct(int id) {
-	Product bdo = opr.read(id);
-	ProductDTO result = null;
-	if(bdo != null)
-	    result = new ProductDTO(bdo.getId(), bdo.getName(), bdo.getType(), bdo.getCode(), bdo.getPrice());
-	return result;
-    }
+	@Override
+	public ProductDTO getProduct(int id) {
+		Product bdo = opr.read(id);
+		ProductDTO result = null;
+		if (bdo != null)
+			result = new ProductDTO(bdo.getId(), bdo.getName(), bdo.getType(), bdo.getCode(), bdo.getPrice());
+		return result;
+	}
 
-    @Override
-    public List<ProductDTO> searchProduct(String criteria, String value) {
-	List<Product> pList = opr.search(criteria, value);
-	List<ProductDTO> pDTOList = new ArrayList<>();
-	for(Product bdo : pList)
-	    pDTOList.add(new ProductDTO(bdo.getId(), bdo.getName(), bdo.getType(), bdo.getCode(), bdo.getPrice()));
-	return pDTOList;
-    }
+	@Override
+	public List<ProductDTO> searchProduct(String criteria, String value) {
+		List<Product> pList = opr.search(criteria, value);
+		List<ProductDTO> pDTOList = new ArrayList<>();
+		for (Product bdo : pList)
+			pDTOList.add(new ProductDTO(bdo.getId(), bdo.getName(), bdo.getType(), bdo.getCode(), bdo.getPrice()));
+		return pDTOList;
+	}
 
-    @Override
-    public boolean deleteProduct(int id) {
-	return opr.delete(id);
-    }
+	@Override
+	public boolean deleteProduct(int id) {
+		return opr.delete(id);
+	}
 
 }
